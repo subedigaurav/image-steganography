@@ -1,6 +1,9 @@
 package com.steganography.controller;
 
 import java.io.IOException;
+import java.time.Instant;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
@@ -134,10 +137,12 @@ public class SteganographyController {
             byte[] stegoBytes = steganographyService.encode(
                     coverImage.getInputStream(), message, password, quality);
 
+            String filename = buildStegoFilename(coverImage.getOriginalFilename());
+
             return ResponseEntity.ok()
                     .contentType(MediaType.IMAGE_JPEG)
                     .header(HttpHeaders.CONTENT_DISPOSITION,
-                            "attachment; filename=\"stego-image.jpg\"")
+                            "attachment; filename=\"" + filename + "\"")
                     .body(new ByteArrayResource(stegoBytes));
 
         } catch (MessageTooLongException ex) {
@@ -189,6 +194,27 @@ public class SteganographyController {
             return decodeError(model, ex.getMessage());
         }
         return "decode";
+    }
+
+    /**
+     * Builds the stego image filename: original base name + "_stego_" + timestamp +
+     * ".jpg".
+     */
+    private String buildStegoFilename(String originalFilename) {
+        String base = "image";
+        if (originalFilename != null && !originalFilename.isBlank()) {
+            String name = originalFilename.replaceAll(".*[/\\\\]", "");
+            int dot = name.lastIndexOf('.');
+            base = dot > 0 ? name.substring(0, dot) : name;
+            base = base.replaceAll("[^a-zA-Z0-9._-]", "_");
+            if (base.isBlank()) {
+                base = "image";
+            }
+        }
+        String timestamp = DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss")
+                .withZone(ZoneOffset.UTC)
+                .format(Instant.now());
+        return base + "_stego_" + timestamp + ".jpg";
     }
 
     /**
