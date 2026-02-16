@@ -1,0 +1,24 @@
+# Environment and secrets
+.env
+.env.local
+.env.*.local
+
+# Build
+target/
+*.jar
+*.war
+*.class
+
+# IDE
+.idea/
+*.iml
+.vscode/
+.settings/
+.project
+.classpath
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db

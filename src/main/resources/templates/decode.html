@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Extract a Message — Image Steganography</title>
+  <meta name="description"
+    content="Extract hidden messages from stego JPEG images. Upload the image and enter your password to reveal the secret text.">
+  <meta name="author" content="Gaurav Subedi">
+  <link rel="canonical" th:href="${requestUrl}">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Extract a Message — Image Steganography">
+  <meta property="og:description"
+    content="Extract hidden messages from stego JPEG images. Enter your password to reveal the secret text.">
+  <meta property="og:url" th:content="${requestUrl}">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Extract a Message — Image Steganography">
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap"
+    rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link th:href="@{/css/app.css}" rel="stylesheet">
+</head>
+
+<body class="page-container">
+  <div class="container" style="max-width: 520px;">
+    <div class="page-header">
+      <div class="page-nav-actions d-flex align-items-center justify-content-between">
+        <a th:href="@{/}" class="btn btn-link btn-sm page-nav-link px-0">&larr; Back</a>
+        <a th:href="@{/visualize}" class="btn btn-link btn-sm page-nav-link">Visualize</a>
+      </div>
+      <h1 class="page-title mb-1">Extract a Message</h1>
+      <p class="page-subtitle">Upload a stego image and enter the password to reveal the hidden message.</p>
+    </div>
+
+    <div id="messageArea">
+      <div th:if="${error}" class="alert alert-danger mb-3" th:text="${error}"></div>
+      <div th:if="${success}" class="card form-card border-start border-4 border-success mb-3">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <h6 class="mb-0 fw-semibold text-success">Message Extracted</h6>
+            <button class="btn btn-sm btn-outline-secondary" onclick="copyMessage()">Copy</button>
+          </div>
+          <pre id="extractedMessage" class="bg-light rounded p-3 mb-0 small"
+            style="white-space: pre-wrap; word-break: break-word;" th:text="${message}"></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="card form-card">
+      <div class="card-body">
+        <form id="decodeForm" th:action="@{/decode}" method="post" enctype="multipart/form-data">
+          <div class="mb-4">
+            <label for="stegoImage" class="form-label fw-medium">Stego Image</label>
+            <input type="file" class="form-control" id="stegoImage" name="stegoImage" accept=".jpg,.jpeg,image/jpeg"
+              required>
+            <div class="form-text mt-1">JPEG image created by this app.</div>
+          </div>
+
+          <div class="mb-4">
+            <label for="password" class="form-label fw-medium">Password</label>
+            <input type="password" class="form-control" id="password" name="password" placeholder="Enter the password"
+              required>
+          </div>
+
+          <button type="submit" id="submitBtn" class="btn btn-primary w-100 py-2">
+            <span class="btn-content">Extract Message</span>
+            <span class="btn-loading-content" style="display: none;">
+              <span class="spinner-border spinner-border-sm me-2" role="status"></span>
+              Extracting…
+            </span>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script th:src="@{/js/decode.js}"></script>
+</body>
+
+</html>
