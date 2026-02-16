@@ -8,14 +8,6 @@ A Spring Boot web application for hiding and extracting secret text messages ins
 
 This implementation is based on the methodology and algorithms described in the [research paper](https://www.researchgate.net/publication/338912933_A_Secure_and_Effective_Pattern-Based_Steganographic_Method_in_Coloured_JPEG_Images).
 
-## Live Demo
-
-**The application is live at [steganography.gauravsubedi.com](https://steganography.gauravsubedi.com)**
-
-Try it out: hide a message in any image, download the stego JPEG, and extract it with your password.
-
----
-
 ## Features
 
 | Feature | Description |
